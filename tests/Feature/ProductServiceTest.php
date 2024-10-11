@@ -20,6 +20,15 @@ class ProductServiceTest extends TestCase
         $this->productService = $this->app->make(ProductServiceImpl::class);
     }
 
+    public function testGetAll()
+    {
+        $this->seed(ProductSeeder::class);
+        self::assertNotNull(Product::all());
+
+        $products = $this->productService->getAll();
+        self::assertCount(1, $products);
+    }
+
     public function testSave()
     {
         self::assertDatabaseEmpty('products');

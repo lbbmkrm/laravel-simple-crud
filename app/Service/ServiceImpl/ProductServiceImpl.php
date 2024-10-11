@@ -7,13 +7,18 @@ use App\Service\ProductService;
 
 class ProductServiceImpl implements ProductService
 {
+    public function getAll()
+    {
+        return Product::all();
+    }
+
     public function save(
         string $name,
         string $sku,
         string $description,
         string $image,
         int $price
-    ) {
+    ): void {
         $product = new Product([
             'name' => $name,
             'sku' => $sku,
@@ -24,9 +29,9 @@ class ProductServiceImpl implements ProductService
         $product->save();
     }
 
-    public function removeProduct(int $id)
+    public function removeProduct(int $id): void
     {
-        $product = Product::query()->find($id);
+        $product = Product::query()->findOrFail($id)->first();
         $product->delete();
     }
 }

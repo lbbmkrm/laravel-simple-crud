@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('name', 100)->nullable(false);
             $table->string('sku')->nullable(false);
             $table->integer('price')->nullable(false);
-            $table->text('description')->nullable();
-            $table->string('image')->nullable();
+            $table->text('description')->nullable(true);
+            $table->string('image')->nullable(true);
             $table->timestamps();
         });
     }

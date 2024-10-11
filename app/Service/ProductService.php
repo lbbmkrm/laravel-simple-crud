@@ -4,6 +4,8 @@ namespace App\Service;
 
 interface ProductService
 {
+
+    public function getAll();
     public function save(
         string $name,
         string $sku,

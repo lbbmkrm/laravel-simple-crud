@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Product;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Http\UploadedFile;
 
 class ProductSeeder extends Seeder
 {
@@ -18,6 +19,7 @@ class ProductSeeder extends Seeder
         $product->sku = uniqid();
         $product->description = fake()->text(100);
         $product->price = 1000;
-        $product->image = fake()->image();
+        $product->image = UploadedFile::fake()->image('product.jpg');
+        $product->save();
     }
 }
