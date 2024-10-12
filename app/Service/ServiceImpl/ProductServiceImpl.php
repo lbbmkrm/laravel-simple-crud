@@ -15,8 +15,8 @@ class ProductServiceImpl implements ProductService
     public function save(
         string $name,
         string $sku,
-        string $description,
-        string $image,
+        ?string $description,
+        ?string $image,
         int $price
     ): void {
         $product = new Product([

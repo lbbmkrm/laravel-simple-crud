@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Service\ServiceImpl\ProductServiceImpl;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
@@ -30,14 +31,13 @@ class ProductController extends Controller
         return response()->view('product.save', ['tittle' => 'Save Product']);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $rules = [
             'name' => 'required',
-            'sku' => 'required|min:6',
+            'sku' => 'required',
             'price' => 'required|numeric',
             'image' => 'nullable|file|mimes:jpg,png,jpeg|max:2048',
-            'description' => 'nullable'
         ];
 
         $validation = Validator::make($request->all(), $rules);
@@ -61,10 +61,10 @@ class ProductController extends Controller
             price: $request['price']
         );
 
-        return redirect()->route('product.save')->with('success', 'Product saved successfully');
+        return redirect()->route('product.index')->with('success', 'Product saved successfully');
     }
 
-    public function edit($id)
+    public function edit($id): Response
     {
         $product = Product::find($id);
         return response()->view('product.edit', [
@@ -73,7 +73,7 @@ class ProductController extends Controller
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): RedirectResponse
     {
         $rules = [
             'name' => 'required',
@@ -89,12 +89,13 @@ class ProductController extends Controller
             return redirect()->back()->withInput()->withErrors($validation);
         }
 
-        $product = new Product([
-            'name' => $request->name,
-            'sku' => $request->sku,
-            'price' => $request->price,
-            'description' => $request->description
-        ]);
+        $product = Product::findOrFail($id);
+
+        // Update data produk
+        $product->name = $request->name;
+        $product->sku = $request->sku;
+        $product->price = $request->price;
+        $product->description = $request->description;
 
         if ($request->hasFile('image')) {
             $extension = $request->file('image')->getClientOriginalExtension();
@@ -107,7 +108,7 @@ class ProductController extends Controller
         return redirect()->route('product.index')->with('success', 'Product update successfully');
     }
 
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         $this->productService->removeProduct($id);
         return redirect()->route('product.index')->with('success', 'Product delete successfully');

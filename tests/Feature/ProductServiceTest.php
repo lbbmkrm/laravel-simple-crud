@@ -8,6 +8,7 @@ use Database\Seeders\ProductSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class ProductServiceTest extends TestCase
@@ -60,6 +61,7 @@ class ProductServiceTest extends TestCase
         self::assertNotNull(Product::all());
 
         $product = Product::where('name', 'example')->first();
+        Log::info(json_encode($product->image));
         $this->productService->removeProduct($product->id);
     }
 }
